@@ -31,7 +31,7 @@ void quicksort(int arr[], int inicio, int fim)
 
 int main()
 {
-    int vector[10] = {8, 4, 2, 6, 7, 1, 4, 10, 12, 3};
+    int vector[12] = {1, 7, 2, 10, 2, 5, 4, 11, 6, 13, 20, 15};
 
     quicksort(vector, 0, 10);
     for (int i = 0; i < 10; i++)
