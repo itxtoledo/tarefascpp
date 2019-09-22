@@ -33,8 +33,8 @@ int main()
 {
     int vector[12] = {1, 7, 2, 10, 2, 5, 4, 11, 6, 13, 20, 15};
 
-    quicksort(vector, 0, 10);
-    for (int i = 0; i < 10; i++)
+    quicksort(vector, 0, 12);
+    for (int i = 0; i < 12; i++)
     {
         cout << vector[i] << ' ';
     }
