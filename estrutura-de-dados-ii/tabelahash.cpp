@@ -23,6 +23,22 @@ struct Hash
     Hash **vector;
 };
 
+Hash *newHash(int tam)
+{
+    Hash *newH = (Hash *)calloc(1, sizeof(Hash));
+    newH->size = tam;
+    newH->amount = 0;
+    newH->vector = (Node **)calloc(tam, sizeof(Node *));
+
+    int i = 0;
+    for (i = 0; i < newH->size; i++)
+    {
+        newH->vector[i] = NULL;
+    }
+
+    return newH;
+}
+
 bool release_hash(Hash *oldHash)
 {
     if (oldHash == NULL)
