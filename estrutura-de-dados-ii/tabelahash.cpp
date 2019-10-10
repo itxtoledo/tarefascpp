@@ -1,14 +1,18 @@
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
 struct Node;
 struct Hash;
 bool release_hash(Hash *oldHash);
+Hash *new_hash(int size);
+int generate_hash(string input, int size);
 
 int main()
 {
-    // null
+    Hash* hash = new_hash(10);
+    cout << hash;
 }
 
 struct Node
@@ -23,20 +27,20 @@ struct Hash
     Hash **vector;
 };
 
-Hash *newHash(int tam)
+Hash *new_hash(int size)
 {
-    Hash *newH = (Hash *)calloc(1, sizeof(Hash));
-    newH->size = tam;
-    newH->amount = 0;
-    newH->vector = (Node **)calloc(tam, sizeof(Node *));
+    Hash *newHash = (Hash *)calloc(1, sizeof(Hash));
+    newHash->size = size;
+    newHash->amount = 0;
+    newHash->vector = (Node **)calloc(size, sizeof(Node *));
 
     int i = 0;
-    for (i = 0; i < newH->size; i++)
+    for (i = 0; i < newHash->size; i++)
     {
-        newH->vector[i] = NULL;
+        newHash->vector[i] = NULL;
     }
 
-    return newH;
+    return newHash;
 }
 
 bool release_hash(Hash *oldHash)
@@ -54,4 +58,12 @@ bool release_hash(Hash *oldHash)
         free(oldHash);
         return true;
     }
+}
+
+int generate_hash(string input, int size)
+{
+    int hash = 0;
+    for (unsigned i = 0; i < sizeof(input); i++)
+        hash = (11 * hash + input[i]) % size;
+    return hash;
 }
