@@ -2,16 +2,23 @@
 #include <string>
 #include <string.h>
 #include <iostream>
-
 #include <iostream>
 
 using namespace std;
 
-int funcaoHash(int key, int size)
+int funcaoHash(const string &key, int tableSize)
 {
-    float x = 0.59896787;
-    float resp = key * x - (int)(key * x);
-    return (int)(size * resp);
+    int hashVal = 0;
+
+    for (int i = 0; i < key.length(); i++)
+        hashVal = 37 * hashVal + key[i];
+
+    hashVal %= tableSize;
+
+    if (hashVal < 0)
+        hashVal += tableSize;
+
+    return hashVal;
 }
 
 class node
@@ -19,8 +26,8 @@ class node
     friend class table;
 
 private:
-    int key;
-    string value;
+    string key;
+    int value;
     node *next;
 
 public:
@@ -36,17 +43,17 @@ private:
 public:
     table(int cap);
     ~table();
-    void insert(int key, string value);
-    string get(int key);
-    void change(int key, string value);
-    void remove(int key);
+    void insert(string key, int value);
+    int get(string key);
+    void change(string key, int value);
+    void remove(string key);
     void show();
 };
 
 node::node()
 {
-    key = 0;
-    value = "";
+    key = "";
+    value = 0;
     next = NULL;
 }
 
@@ -75,10 +82,10 @@ table::~table()
     delete[] elements;
 }
 
-void table::insert(int key, string value)
+void table::insert(string key, int value)
 {
     int hash = funcaoHash(key, size);
-    if (get(key) == "NÂO ENCONTRADO")
+    if (get(key) == 0)
     {
         if (elements[hash] == NULL)
         {
@@ -88,7 +95,7 @@ void table::insert(int key, string value)
         }
         else
         {
-            cout << "COLIDIU: " << key << endl;
+            // cout << "COLIDIU: " << key << endl;
             node *atual = elements[hash];
             while (atual->next != NULL)
             {
@@ -102,11 +109,11 @@ void table::insert(int key, string value)
     }
     else
     {
-        cout << "O ITEM JÁ ESTÁ NA TABELA" << endl;
+        // cout << "O ITEM JÁ ESTÁ NA TABELA" << endl;
     }
 }
 
-string table::get(int key)
+int table::get(string key)
 {
     int hash = funcaoHash(key, size);
     if (elements[hash] != NULL and elements[hash]->key == key)
@@ -128,37 +135,37 @@ string table::get(int key)
         }
         else
         {
-            return "NÂO ENCONTRADO";
+            return 0;
         }
     }
 }
 
-void table::change(int key, string value)
-{
-    int hash = funcaoHash(key, size);
-    if (elements[hash] != NULL and elements[hash]->key == key)
-    {
-        elements[hash]->value = value;
-    }
-    else
-    {
-        node *atual = elements[hash];
-        while (atual != NULL and atual->key != key)
-        {
-            atual = atual->next;
-        }
-        if (atual != NULL and atual->key == key)
-        {
-            atual->value = value;
-        }
-        else
-        {
-            cerr << "ERRO NA ALTERAÇÃO" << endl;
-        }
-    }
-}
+// void table::change(int key, string value)
+// {
+//     int hash = funcaoHash(key, size);
+//     if (elements[hash] != NULL and elements[hash]->key == key)
+//     {
+//         elements[hash]->value = value;
+//     }
+//     else
+//     {
+//         node *atual = elements[hash];
+//         while (atual != NULL and atual->key != key)
+//         {
+//             atual = atual->next;
+//         }
+//         if (atual != NULL and atual->key == key)
+//         {
+//             atual->value = value;
+//         }
+//         else
+//         {
+//             cerr << "ERRO NA ALTERAÇÃO" << endl;
+//         }
+//     }
+// }
 
-void table::remove(int key)
+void table::remove(string key)
 {
     int hash = funcaoHash(key, size);
     if (elements[hash] != NULL and elements[hash]->key == key)
@@ -208,33 +215,29 @@ void table::show()
 
 int main()
 {
-    table th(10);
-    th.insert(1, "value1");
-    th.insert(2, "value2");
-    th.insert(3, "teste");
-    th.show();
-    //th.remove(1);
-    //th.show();
-    return 0;
-}
 
-int main()
-{
-    int ocorrencias[246][246];
+    table th(1000);
+    th.show();
     std::ifstream is("sus.csv");
 
     std::string line;
     while (std::getline(is, line))
     {
-        const char *begin = line.c_str();
 
-        // strip beyond first comma
-        if (const char *end = strchr(begin, ','))
+        std::cout << line << std::endl;
+
+        int temp = th.get(line);
+        if (temp != 0)
         {
-            std::string column1(begin, end - begin);
-            if (ocorrencias)
-            std::cout << column1 << std::endl;
+            th.remove(line);
+            th.insert(line, temp++);
         }
+        else
+        {
+            th.insert(line, 1);
+        }
+
+        th.show();
     }
     return 0;
 }
