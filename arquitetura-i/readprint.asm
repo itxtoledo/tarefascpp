@@ -6,10 +6,11 @@
 segment .data 
 mens db "Digite uma frase",10
 tam equ $-mens
+qd dd 10
 
 segment .bss
 bdest resb 15
-qd resd 1
+;qd resd 1
 
 segment .text
 global _start
@@ -20,13 +21,13 @@ _start:
     mov eax,4 ; print
     int 80h
     
-    mov edx,qd
+    mov edx,[qd]
     mov ecx,bdest
     mov ebx,0
     mov eax,3
 	int 80h
 	
-	mov edx,qd
+	mov edx,[qd]
     mov ecx,bdest ; string
     mov ebx,1 ; fd = tela
     mov eax,4 ; print
