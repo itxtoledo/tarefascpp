@@ -12,8 +12,8 @@ int cutRod(int vetor[], int n)
 
 	int maxVal = INT_MIN;
 
-	for (int i = 0; i<n; i++)
-		maxVal = max(maxVal, vetor[i] + cutRod(vetor, n-i-1));
+	for (int i = 1; i <= n; i++)
+		maxVal = max(maxVal, vetor[i-1] + cutRod(vetor, n-i));
 
 	return maxVal;
 }
