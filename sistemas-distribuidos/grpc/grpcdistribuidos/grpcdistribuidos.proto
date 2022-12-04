@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "grpcdistribuidos/grpcdistribuidos";
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.grpcdistribuidos";
+option java_outer_classname = "GRPCDistribuidosdProto";
+
+package grpcdistribuidos;
+
+// The service definition.
+service Distribuidos {
+  rpc GetTimestamp (GetTimestampParams) returns (TimestampReply) {}
+  rpc GetCryptoPrice (GetCryptoPriceParams) returns (GetCryptoPriceReply) {}
+}
+
+message GetTimestampParams {}
+
+message TimestampReply {
+  int64 timestamp = 1;
+}
+
+message GetCryptoPriceParams {
+    string symbol = 1;
+}
+
+message GetCryptoPriceReply {
+  double price = 1;
+}
