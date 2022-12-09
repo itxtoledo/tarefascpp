@@ -1,3 +1,11 @@
+Install dependencies
+
+```
+go mod download
+
+```
+
+
 Compile .proto file
 
 ```
